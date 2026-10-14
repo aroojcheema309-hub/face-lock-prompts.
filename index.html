@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Face Lock Prompts - Free AI photo prompts</title>
+<meta name="description" content="Free AI photo prompts. Face Lock rakhta hai ke chehra na badle, sirf kapray aur background badlein.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F1FA;--ink:#25163A;--muted:#6B5C80;--card:#fff;--line:#DDD2EA;--pink:#C2185B;--lock:#157A62;--lockbg:#E3F4EE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.1;margin:28px 0 10px;font-weight:800}
+.sub{color:var(--muted);max-width:60ch;margin:0 0 22px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
+.toggle{display:flex;gap:12px;align-items:flex-start;padding:10px 0}
+.toggle+.toggle{border-top:1px solid var(--line)}
+.toggle input{width:22px;height:22px;margin-top:3px;accent-color:var(--lock)}
+.toggle b{display:block}
+.toggle small{color:var(--muted)}
+#lockState{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:99px;font-size:.85rem;font-weight:600;background:var(--lockbg);color:var(--lock)}
+#lockState.off{background:#FDE7EE;color:var(--pink)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:99px;font:inherit;font-size:.92rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+#q{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font-size:1.05rem}
+.cat{color:var(--muted);font-size:.85rem}
+.scene{font-size:.92rem;margin:0;flex:1}
+.copy{border:0;background:var(--pink);color:#fff;font:inherit;font-weight:600;padding:10px;border-radius:10px;cursor:pointer}
+.copy.done{background:var(--lock)}
+button:focus-visible,input:focus-visible{outline:3px solid #7A3FD1;outline-offset:2px}
+.tip{font-size:.9rem;color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.foot{margin-top:30px;font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Chehra wohi, kapray aur background naye</h1>
+<p class="sub">Prompt chuno, Copy dabao, phir apni photo ke saath Gemini ya ChatGPT mein paste karo. Face Lock ON ho to chehra badalne se roka jata hai.</p>
+
+<div class="panel">
+  <label class="toggle"><input type="checkbox" id="lock" checked>
+    <span><b>Face Lock</b><small>Chehra, skin tone aur expression bilkul wahi rahe.</small></span></label>
+  <label class="toggle"><input type="checkbox" id="makeup">
+    <span><b>Makeup lagana hai</b><small>Band ho to makeup nahi lagega, chehra original rahega.</small></span></label>
+  <span id="lockState">Face Lock ON</span>
+</div>
+
+<input id="q" type="search" placeholder="Prompt dhoondo (jaise bridal, eid, office)" aria-label="Prompt dhoondo">
+<div class="tools" id="cats" role="group" aria-label="Categories"></div>
+<p class="tip" id="count"></p>
+<div class="grid" id="list"></div>
+<div class="tools" id="more" style="justify-content:center;margin-top:16px"></div>
+
+<p class="tip">Tip: saaf, seedhi, roshni wali front photo use karo aur prompt ke saath photo zaroor attach karo. Result AI tool ke hisaab se thoda alag ho sakta hai.</p>
+<p class="foot">Sirf apni photo ya us insan ki ijazat se use karein.</p>
+</div>
+
+<script>
+var LOCK = "Keep the face exactly the same as the uploaded photo. Do not change facial features, face shape, skin tone, eyes, nose, lips or expression. No beautification or skin smoothing.";
+var NOMAKEUP = "Do not add any makeup.";
+var MAKEUP = "Add only natural soft makeup: light foundation, subtle eyeliner and nude lipstick, without changing the facial structure.";
+var CHANGE = "Change only the clothing and the background.";
+
+var D={
+"Shaadi":{o:["Maroon bridal lehenga|heavy maroon and gold bridal lehenga with dupatta and jewelry","Red bridal sharara|red embroidered bridal sharara with a net dupatta","Mehndi yellow dress|bright yellow and green mehndi dress with floral jewelry","Walima pastel gown|elegant pastel pink long gown with embroidered dupatta","Baraat gold gharara|ivory and gold gharara with a heavy dupatta"],
+ b:["Mughal-style palace courtyard in warm evening light","Decorated mehndi stage with marigold flowers","White and gold banquet hall with chandeliers","Rose garden at sunset","Old haveli with carved arches","Floral swing decorated with jasmine","Lahore Fort walls at golden hour","Wedding marquee with warm string lights at night","Poolside with floating candles","Studio with a draped cream curtain"]},
+"Eid":{o:["Emerald shalwar kameez|new embroidered emerald green shalwar kameez","White chikankari kurta|white chikankari kurta with a pastel dupatta","Pink frock suit|pastel pink embroidered frock with churidar","Black and gold kurta|festive black and gold kurta with bangles","Sky blue sharara|sky blue sharara set with light jewelry"],
+ b:["Sunny home courtyard decorated for Eid","Rooftop at dusk with a crescent moon","White mosque in soft morning light","Living room with sheer khurma and sweets","Room decorated with balloons and lanterns","Green garden with morning sunlight","Colourful Eid bazaar with bangle stalls","Warm family lounge with fairy lights","Night sky with a large crescent moon","Pastel flower wall backdrop"]},
+"Traditional":{o:["Silk saree|deep blue silk saree with gold border","Ajrak shawl|traditional Sindhi ajrak shawl over a plain kurta","Balochi dress|Balochi embroidered dress with mirror work","Waistcoat and cap|traditional waistcoat over a kurta with a cap","Phulkari suit|phulkari embroidered dupatta over a bright suit"],
+ b:["Heritage haveli corridor","Desert village at sunset","Wheat field at golden hour","Old city gate","Village courtyard with a charpai","Mughal garden with fountains","Badshahi Mosque courtyard","Sand dunes with a camel","Clay pottery workshop","Mountain village with stone houses"]},
+"Professional":{o:["Navy blazer|navy blazer over a white shirt","Charcoal suit|charcoal grey formal suit","Formal shalwar kameez|crisp formal shalwar kameez with a waistcoat","Smart blouse|smart plain blouse with a light blazer","White lab coat|clean white lab coat"],
+ b:["Clean light grey studio backdrop","Modern bright office","Plain white background, passport style","Library with bookshelves","Glass meeting room","Tech startup workspace","Blurred outdoor park","Plain brick wall","Conference stage","Home office with a bookshelf"]},
+"Vintage":{o:["90s printed shirt|90s style printed shirt and denim jacket","1960s classic|timeless 1960s style dress or suit","70s flares|70s style flared outfit with a bold collar","Retro polka dots|retro polka dot dress or shirt","Lollywood 80s|1980s style outfit with a big collar"],
+ b:["Old city street with a vintage car","Old studio with a curtain, black and white","Retro diner","Vintage railway station","Old cinema hall","Film-grain street at dusk","Record shop","Old bazaar","Plain wall, Polaroid style","Classic photo studio"]},
+"Instagram":{o:["Beige cardigan|beige cardigan and white top","Oversized hoodie|oversized hoodie and jeans","Denim jacket|denim jacket with a plain tee","Summer floral dress|light summer floral outfit","Streetwear|trendy streetwear with sneakers"],
+ b:["Cozy cafe with window light","Rooftop at sunset","Pastel wall","Neon-lit street at night","Field of flowers","Bookshop","Beach at golden hour","Minimal white studio","Balcony full of plants","City skyline at dusk"]},
+"Safar":{o:["Light jacket|light travel jacket and cap","Winter coat|warm winter coat and scarf","Trekking gear|trekking jacket and backpack","Summer kurta|light cotton kurta and sunglasses","Bright raincoat|bright raincoat"],
+ b:["Hunza Valley with snowy peaks","Naran lake","Swat river bank","Skardu landscape","Fairy Meadows with Nanga Parbat","Murree pine forest","Karakoram Highway","Deosai plains with wildflowers","Neelum Valley","Attabad Lake"]},
+"Winter":{o:["Woolen shawl|warm woolen shawl over a kurta","Long coat|long wool coat","Sweater and muffler|chunky sweater and muffler","Puffer jacket|puffer jacket","Beanie and gloves|woolen beanie, gloves and sweater"],
+ b:["Snowy mountains","Room with a fireplace","Foggy morning field","Winter market with roasted corn","Snowy pine forest","Frosty garden","Balcony with steaming tea","Misty lake","Sofa with blanket and chai","Street lights in snowfall"]},
+"14 August":{o:["Green and white suit|green and white shalwar kameez with a small flag badge","Green dupatta|white outfit with a green dupatta","Green sherwani|green sherwani","White kurta, green waistcoat|white kurta with a green waistcoat","Flag scarf|flag-print scarf over a white outfit"],
+ b:["Minar-e-Pakistan","Street lined with flags","Room with green and white balloons","Flag in a green field","Night with fireworks","Mausoleum of the Quaid","Parade ground","Rooftop with flags","Mountain with a flag","Decorated bazaar"]},
+"Dukaan":{o:["Apron|neat shop apron","Shop uniform|clean shop uniform","Shirt and name tag|neat shirt with a name tag","Chef coat|white chef coat and cap","Tailor look|neat kurta with a measuring tape around the neck"],
+ b:["Clean shop counter","Cloth shop shelves","Bakery counter","Mobile phone shop","Grocery store aisle","Tailor shop with sewing machines","Restaurant kitchen","Boutique with mannequins","Salon mirror","Furniture showroom"]}
+};
+var PROMPTS=[];
+Object.keys(D).forEach(function(c){D[c].o.forEach(function(o){var oa=o.split("|");D[c].b.forEach(function(b){PROMPTS.push({t:oa[0]+" - "+b.split(" ").slice(0,3).join(" "),c:c,s:"Outfit: "+oa[1]+". Background: "+b.charAt(0).toLowerCase()+b.slice(1)+"."});});});});
+
+var state={cat:"All",q:"",limit:24};
+var lockEl=document.getElementById("lock"),mkEl=document.getElementById("makeup"),stEl=document.getElementById("lockState");
+
+function build(s){
+  var parts=[];
+  if(lockEl.checked){parts.push(LOCK);parts.push(mkEl.checked?MAKEUP:NOMAKEUP);}
+  else if(mkEl.checked){parts.push(MAKEUP);}
+  parts.push(s);
+  if(lockEl.checked)parts.push(CHANGE);
+  return parts.join(" ");
+}
+function renderState(){
+  stEl.textContent=lockEl.checked?"Face Lock ON":"Face Lock OFF (chehra badal sakta hai)";
+  stEl.className=lockEl.checked?"":"off";
+}
+function renderCats(){
+  var cats=["All"];PROMPTS.forEach(function(p){if(cats.indexOf(p.c)<0)cats.push(p.c)});
+  var box=document.getElementById("cats");box.innerHTML="";
+  cats.forEach(function(c){
+    var b=document.createElement("button");b.className="chip";b.textContent=c;
+    b.setAttribute("aria-pressed",String(state.cat===c));
+    b.onclick=function(){state.cat=c;state.limit=24;renderCats();renderList();};
+    box.appendChild(b);
+  });
+}
+function copyText(text,btn){
+  function ok(){btn.textContent="Copy ho gaya";btn.classList.add("done");setTimeout(function(){btn.textContent="Copy prompt";btn.classList.remove("done")},1800);}
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(ok,fallback);}else{fallback();}
+  function fallback(){var t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();try{document.execCommand("copy");ok();}catch(e){btn.textContent="Khud copy karein";}document.body.removeChild(t);}
+}
+function renderList(){
+  var list=document.getElementById("list");list.innerHTML="";document.getElementById("more").innerHTML="";
+  var q=state.q.toLowerCase();
+  var items=PROMPTS.filter(function(p){
+    return (state.cat==="All"||p.c===state.cat)&&(!q||(p.t+" "+p.c+" "+p.s).toLowerCase().indexOf(q)>=0);
+  });
+  if(!items.length){list.innerHTML='<div class="empty">Koi prompt nahi mila. Doosra lafz try karo.</div>';return;}
+  document.getElementById("count").textContent=items.length+" prompts";
+  items.slice(0,state.limit).forEach(function(p){
+    var d=document.createElement("div");d.className="card";
+    d.innerHTML='<span class="cat"></span><h3></h3><p class="scene"></p>';
+    d.querySelector(".cat").textContent=p.c;
+    d.querySelector("h3").textContent=p.t;
+    d.querySelector(".scene").textContent=p.s;
+    var b=document.createElement("button");b.className="copy";b.textContent="Copy prompt";
+    b.onclick=function(){copyText(build(p.s),b);};
+    d.appendChild(b);list.appendChild(d);
+  });
+  if(items.length>state.limit){var m=document.getElementById("more"),mb=document.createElement("button");mb.className="chip";mb.textContent="Aur dikhao ("+(items.length-state.limit)+" baqi)";mb.onclick=function(){state.limit+=24;renderList();};m.appendChild(mb);}
+}
+lockEl.onchange=renderState;
+document.getElementById("q").oninput=function(e){state.q=e.target.value;state.limit=24;renderList();};
+renderState();renderCats();renderList();
+</script>
+</body>
+</html>
